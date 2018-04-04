@@ -8,28 +8,35 @@ class Schema {
 
   version(version, fn) {
     this.versions.push({ version, fn })
+    this.versions.sort((a, b) => a.version - b.version)
   }
 
-  needUpgrade() {
-    this.filteredVersions = this.versions
-      .sort((a, b) => a.version - b.version)
-      .filter(({ version }) => version > this.currentVersion)
-
-    return Boolean(this.filteredVersions.length)
+  latest() {
+    if (this.versions.length) {
+      return this.versions[this.versions.length - 1].version
+    } else {
+      return null
+    }
   }
 
   async upgrade() {
-    if (!this.needUpgrade()) return true
+    const latest = this.latest()
+    if (latest === this.currentVersion) return true
 
-    for (const { version, fn } of this.filteredVersions) {
+    const upgrades = this.versions.filter(({ version }) => version > this.currentVersion)
+
+    for (const { version, fn } of upgrades) {
       try {
+        console.log(`Upgrading to version ${version} ...`) // eslint-disable-line no-console
         await fn(this.db)
+        console.log('Success') // eslint-disable-line no-console
       } catch (e) {
-        console.error('Error occurred when upgrading to version ' + version) // eslint-disable-line
+        console.error('Error occurred when upgrading to version ' + version) // eslint-disable-line no-console
         throw e
       }
     }
 
+    console.log('Database schema upgraded to version ' + latest) // eslint-disable-line no-console
     return true
   }
 }

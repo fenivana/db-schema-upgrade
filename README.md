@@ -4,8 +4,6 @@ Database-agnostic schema upgrading library.
 ## Usage
 ```js
 async function main() {
-  const VERSION_LATEST = 1
-
   const Schema = require('schema-upgrade')
   const { MongoClient } = require('mongodb')
   const mongoClient = await new MongoClient('mongodb://localhost:27017').connect()
@@ -34,7 +32,9 @@ async function main() {
     await db.collection('users').crateIndex({ openId: 1 }, { unique: true })
   })
 
-  if (!schema.needUpgrade()) return
+  const latest = schema.latest()
+
+  if (latest === appInfo.version) return
 
   const result = await collection.updateOne({
     key: 'appInfo',
@@ -58,12 +58,10 @@ async function main() {
     upgrading: true
   }, {
     $set: {
-      version: VERSION_LATEST,
+      version: latest,
       upgrading: false
     }
   })
-
-  console.log('Database schema upgraded to version ' + VERSION_LATEST) // eslint-disable-line
 }
 
 main()
@@ -80,8 +78,8 @@ number: the version number.
 upgradeFunction: The operations to run for this version.
 It will be called with parameter `db`, and should return a `Promise`.
 
-### schema.needUpgrade()
-Returns `true` if upgrade is needed, or `false` otherwise.
+### schema.latest()
+Returns the latest version number, or `null` if no version is defined.
 
 ### schema.upgrade()
 Run the upgrade operations.
