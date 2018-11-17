@@ -105,5 +105,7 @@ Returns the latest version number, or `null` if no version is defined.
 Run the upgrade operations.
 It will run the `upgradeFunction` from the next version to the latest version.
 
+Returns: `Promise`. Resolves to `true` when upgrade is completed. Rejects if any error occurred.
+
 ## LICENSE
 MIT
