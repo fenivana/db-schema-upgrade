@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fenivana/schema-upgrade.git"
+    "url": "git+https://github.com/kasha-io/schema-upgrade.git"
   },
   "eslintConfig": {
     "extends": "enough",
@@ -26,11 +26,12 @@
   "author": "Jiang Fengming",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fenivana/schema-upgrade/issues"
+    "url": "https://github.com/kasha-io/schema-upgrade/issues"
   },
-  "homepage": "https://github.com/fenivana/schema-upgrade#readme",
+  "homepage": "https://github.com/kasha-io/schema-upgrade#readme",
   "devDependencies": {
-    "eslint": "^4.18.2",
-    "eslint-config-enough": "^0.3.0"
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-enough": "^0.3.4"
   }
 }
