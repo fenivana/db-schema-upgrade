@@ -25,18 +25,10 @@ class Schema {
 
     const upgrades = this.versions.filter(({ version }) => version > this.currentVersion)
 
-    for (const { version, fn } of upgrades) {
-      try {
-        console.log(`Upgrading to version ${version} ...`) // eslint-disable-line no-console
-        await fn(this.db)
-        console.log('Success') // eslint-disable-line no-console
-      } catch (e) {
-        console.error('Error occurred when upgrading to version ' + version) // eslint-disable-line no-console
-        throw e
-      }
+    for (const { fn } of upgrades) {
+      await fn(this.db)
     }
 
-    console.log('Database schema upgraded to version ' + latest) // eslint-disable-line no-console
     return true
   }
 }

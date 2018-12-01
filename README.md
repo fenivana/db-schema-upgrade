@@ -33,12 +33,16 @@ async function main() {
 
   // version 1
   schema.version(1, async db => {
+    console.log('Upgrading to v1...')
     await db.collection('users').createIndex({ userId: 1 }, { unique: true })
+    console.log('Upgraded to v1')
   })
 
   // version 2
   schema.version(2, async db => {
+    console.log('Upgrading to v2...')
     await db.collection('users').crateIndex({ openId: 1 }, { unique: true })
+    console.log('Upgraded to v2')
   })
 
   // get the latest version
@@ -67,6 +71,7 @@ async function main() {
   }
 
   // upgrade
+  console.log(`Upgrading from version ${appInfo.version} to ${latest}`)
   await schema.upgrade()
 
   // unlock db
