@@ -1,9 +1,9 @@
 class Schema {
-  constructor(db, currentVersion) {
-    this.db = db
+  constructor(currentVersion, ...args) {
+    this.currentVersion = currentVersion
+    this.args = args
     this.versions = []
     this.filteredVersions = []
-    this.currentVersion = currentVersion
   }
 
   version(version, fn) {
@@ -21,12 +21,15 @@ class Schema {
 
   async upgrade() {
     const latest = this.latest()
-    if (latest === this.currentVersion) return true
+
+    if (latest === this.currentVersion) {
+      return true
+    }
 
     const upgrades = this.versions.filter(({ version }) => version > this.currentVersion)
 
     for (const { fn } of upgrades) {
-      await fn(this.db)
+      await fn(...this.args)
     }
 
     return true

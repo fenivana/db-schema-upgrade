@@ -31,7 +31,7 @@
   "homepage": "https://github.com/kasha-io/schema-upgrade#readme",
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.9.0",
+    "eslint": "^5.16.0",
     "eslint-config-enough": "^0.3.4"
   }
 }

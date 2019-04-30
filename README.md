@@ -29,7 +29,7 @@ async function main() {
   }
 
   // create a schema object, provide current db's schema version
-  const schema = new Schema(db, appInfo.version)
+  const schema = new Schema(appInfo.version, db)
 
   // version 1
   schema.version(1, async db => {
@@ -50,7 +50,9 @@ async function main() {
 
   // if db's schema version is the latest
   // no upgrade is needed
-  if (latest === appInfo.version) return
+  if (latest === appInfo.version) {
+    return
+  }
 
   // else we upgrade the schema
   // set 'upgrading' to true to lock the db
@@ -94,14 +96,23 @@ main()
 
 ## APIs
 
-### new Schema(db, currentDBVersion)
+### new Schema(currentVersion, ...args)
 Create a schema object.
 
-### schema.version(number, upgradeFunction)
-Define a version.  
-number: the version number.  
-upgradeFunction: The operations to run for this version.
-It will be called with parameter `db`, and should return a `Promise`.
+#### currentVersion
+`Number`. Current schema version.
+
+#### ...args
+`Any`. The arguments passed to `upgradeFunction`.
+
+### schema.version(versionNumber, upgradeFunction)
+Defines a version.
+
+#### versionNumber
+`Number`. The version number.
+
+#### upgradeFunction(...args)
+`Function`. The upgrade function. It should return a `Promise`.
 
 ### schema.latest()
 Returns the latest version number, or `null` if no version is defined.
